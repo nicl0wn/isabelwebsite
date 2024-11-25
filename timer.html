@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Elapsed</title>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+        body {
+            font-family: "Courier";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #F7D1D8;
+            color: #F7D1D8;
+        }
+        #timer-container {
+            padding: 50px;
+        }
+
+        .entirediv {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            border-radius: 20px;
+            background-color: #36013f;
+            box-shadow: rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        .imgntimer {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        
+        #timer {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        #image {
+            width: 275px;
+            height: 275px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .timergap {
+            margin-left: 25px;
+        }
+
+        .msgtimer {
+            margin-left: 50px;
+            color: #F7D1D8;
+            text-align: left;
+            width:500px;
+            overflow:hidden;
+        }
+
+        .spacing {
+            margin: 30px 0;
+        }
+
+        .button-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .icon-button {
+            font-size: 40px;
+            color: #F7D1D8;
+            cursor: pointer;
+            width: 40px; /* Ensure the width is the same as the font-size */
+            text-align: center;
+        }
+
+        .icon-button:hover {
+            color: grey;
+        }
+
+        .mp3buttons {
+            max-height: 500px; /* Adjust this value as needed */
+            overflow-y: auto;
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            scrollbar-width: none;  /* Firefox */
+            background-color: #2e022f; /* Darker purple background */
+        }
+
+        .mp3buttons::-webkit-scrollbar { 
+            display: none;  /* Safari and Chrome */
+        }
+
+        .mp3button {
+            font-family: Courier;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: none;
+            color: #F7D1D8;
+            background-color: #260225;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            text-align: left;
+            position: relative; /* Ensure positioning context for the number */
+        }
+
+        .mp3button:hover {
+            background-color: #D5A5CC;
+        }
+
+        .mp3button img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .mp3button .mp3info {
+            flex-grow: 1;
+            word-wrap: break-word; /* Ensures long text wraps to the next line */
+            overflow: hidden;
+        }
+
+
+        .mp3button .duration {
+            font-size: 12px;
+            color: #B0AEB1;
+        }
+
+        .number {
+            margin-right: 10px; /* Adjust spacing between number and content */
+            font-size: 16px;
+            color: #F7D1D8;
+        }
+
+        .audiobar {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: #260225;
+            z-index: 1;
+            padding: 10px;
+            font-size: 24px;
+            color: #F7D1D8;
+            text-align: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #prevButton {
+            margin-right: auto; /* Push to the left */
+        }
+
+        #nextButton {
+            margin-left: auto; /* Push to the right */
+        }
+
+        #mp3info{
+            line-height: 1.2em;
+            max-height: 2.4em; /* Match with your line height for two lines */ ;
+            height:2.4em;
+            overflow:hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="entirediv">
+        <div id="timer-container">
+            <div class="imgntimer">
+                <div>
+                    <img id="image" src="media/noaudio.png" alt="Album Art">
+                </div>
+                <div class="msgtimer">
+                    <div class="spacing" id="mp3name" style="font-size: 30px; font-weight: bold;">NO AUDIO PLAYING YET</div>
+                    <div class="spacing" id="mp3duration" style="font-size: 20px; font-weight: bold;">Duration: --</div>
+                    <div class="spacing" id="mp3infoContainer">
+                        <div id="mp3info" style="font-size: 20px; line-height: 1.2em;">
+                            No audio playing so no info u sussy baka.
+                        </div>
+                    </div>                    
+                    <div class="button-container">
+                        <i class="fas fa-backward icon-button" id="prevButton"></i>
+                        <i class="fas fa-play icon-button" id="resumePauseButton"></i>
+                        <i class="fas fa-forward icon-button" id="nextButton"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="audiobar">
+                <audio id="audio" src="" controls style="width: 100%; margin-top: 20px;"></audio>
+            </div>
+        </div>
+        <div class="mp3buttons">
+            <div class="sticky-header">Playlist</div>
+            <button class="mp3button" onclick="playAudio('audio1')">
+                <span class="number">1</span>
+                <img src="media/rnf.jpeg" alt="Secret Recipe 1">
+                <div class="info">
+                    Secret Recipe 1
+                    <div class="duration" id="duration_audio1">Loading...</div>
+                </div>
+            </button>
+            <button class="mp3button" onclick="playAudio('audio2')">
+                <span class="number">2</span>
+                <img src="media/audio2pic.jpg" alt="Secret Recipe 2">
+                <div class="info">
+                    Secret Recipe 2
+                    <div class="duration" id="duration_audio2">Loading...</div>
+                </div>
+            </button>
+            <button class="mp3button" onclick="playAudio('audio3')">
+                <span class="number">3</span>
+                <img src="media/apple.png" alt="Sushi House">
+                <div class="info">
+                    Sushi House
+                    <div class="duration" id="duration_audio3">Loading...</div>
+                </div>
+            </button>
+            <button class="mp3button" onclick="playAudio('audio4')">
+                <span class="number">4</span>
+                <img src="media/apple.png" alt="Walk to Hillion">
+                <div class="info">
+                    Walk to Hillion
+                    <div class="duration" id="duration_audio4">Loading...</div>
+                </div>
+            </button>
+            <button class="mp3button" onclick="playAudio('audio5')">
+                <span class="number">5</span>
+                <img src="media/apple.png" alt="Walk to Hillion">
+                <div class="info">
+                    Boon Keng China Food
+                    <div class="duration" id="duration_audio5">Loading...</div>
+                </div>
+            </button>
+            <button class="mp3button" onclick="playAudio('audio6')">
+                <span class="number">6</span>
+                <img src="media/apple.png" alt="Walk to Hillion">
+                <div class="info">
+                    we're so in love
+                    <div class="duration" id="duration_audio6">Loading...</div>
+                </div>
+            </button>
+            <button class="mp3button" onclick="playAudio('audio7')">
+                <span class="number">7</span>
+                <img src="media/apple.png" alt="Walk to Hillion">
+                <div class="info">
+                    Milo Bark
+                    <div class="duration" id="duration_audio7">Loading...</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const audioFiles = {
+            'audio1': { src: 'media/audio1.ogg', cover: 'media/rnf.jpeg', name: 'Secret Recipe 1', info: 'hi my name is nicholas and i love to get dickame is nicholas and i love to get dicked down b ame is nicholas and i love to get dicked down bed down by many men in the country called singapore' },
+            'audio2': { src: 'media/audio2.ogg', cover: 'media/audio2pic.jpg', name: 'Secret Recipe 2', info: 'This is the second secret recipe.' },
+            'audio3': { src: 'media/audio3.ogg', cover: 'media/apple.png', name: 'Sushi House', info: 'Enjoy some sushi sounds.' },
+            'audio4': { src: 'media/audio4.ogg', cover: 'media/apple.png', name: 'Walk to Hillion', info: 'A relaxing walk to Hillion.' },
+            'audio5': { src: 'media/boonkengchinafood.ogg', cover: 'media/apple.png', name: 'Boon Keng China Food', info: 'A relaxing walk to Hillion.' },
+            'audio6': { src: 'media/weresoinlove.ogg', cover: 'media/apple.png', name: "we're so in love", info: 'A relaxing walk to Hillion.' },
+            'audio7': { src: 'media/milobark.ogg', cover: 'media/apple.png', name: 'Milo Bark', info: 'A relaxing walk to Hillion.' },
+            'audio8': { src: 'media/audio4.ogg', cover: 'media/apple.png', name: 'Walk to Hillion', info: 'A relaxing walk to Hillion.' }
+        }; // List of audio IDs with their sources and covers 
+        let currentAudioId = null; // ID of the current playing audio
+
+        // Function to preload audio files and get their duration
+        async function preloadAudioFiles() {
+            for (const id in audioFiles) {
+                const audio = new Audio(audioFiles[id].src);
+                await new Promise((resolve) => {
+                    audio.addEventListener('loadedmetadata', () => {
+                        const duration = formatDuration(audio.duration);
+                        document.getElementById(`duration_${id}`).textContent = duration;
+                        audioFiles[id].duration = duration;
+                        resolve();
+                    });
+                });
+            }
+        }
+
+        function playAudio(id) {
+            const audio = document.getElementById('audio');
+            const resumePauseButton = document.getElementById('resumePauseButton');
+
+            if (currentAudioId === id && !audio.paused) {
+                audio.pause();
+                resumePauseButton.classList.remove('fa-pause');
+                resumePauseButton.classList.add('fa-play');
+                currentAudioId = null;
+            } else {
+                if (currentAudioId !== id) {
+                    const audioInfo = audioFiles[id];
+                    if (audioInfo) {
+                        audio.src = audioInfo.src;
+                        document.getElementById('image').src = audioInfo.cover;
+                        document.getElementById('mp3name').textContent = audioInfo.name;
+                        document.getElementById('mp3info').textContent = audioInfo.info;
+                        document.getElementById('mp3duration').textContent = `Duration: ${audioInfo.duration}`;
+                        audio.load();
+                        currentAudioId = id;
+                    }
+                }
+                audio.play();
+                resumePauseButton.classList.remove('fa-play');
+                resumePauseButton.classList.add('fa-pause');
+            }
+        }
+
+        function formatDuration(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+
+        function togglePlayPause() {
+            const audio = document.getElementById('audio');
+            const resumePauseButton = document.getElementById('resumePauseButton');
+
+            if (audio.paused) {
+                if (currentAudioId) {
+                    audio.play();
+                    resumePauseButton.classList.remove('fa-play');
+                    resumePauseButton.classList.add('fa-pause');
+                } else {
+                    const firstAudio = Object.keys(audioFiles)[0];
+                    if (firstAudio) {
+                        playAudio(firstAudio);
+                    }
+                }
+            } else {
+                audio.pause();
+                resumePauseButton.classList.remove('fa-pause');
+                resumePauseButton.classList.add('fa-play');
+            }
+        }
+
+        function playNext() {
+            const currentIndex = Object.keys(audioFiles).indexOf(currentAudioId);
+            const keys = Object.keys(audioFiles);
+            const nextKey = keys[(currentIndex + 1) % keys.length];
+            playAudio(nextKey);
+        }
+
+        function playPrevious() {
+            const currentIndex = Object.keys(audioFiles).indexOf(currentAudioId);
+            const keys = Object.keys(audioFiles);
+            const prevKey = keys[(currentIndex - 1 + keys.length) % keys.length];
+            playAudio(prevKey);
+        }
+
+
+        document.getElementById('prevButton').addEventListener('click', playPrevious);
+        document.getElementById('resumePauseButton').addEventListener('click', togglePlayPause);
+        document.getElementById('nextButton').addEventListener('click', playNext);
+
+        window.onload = preloadAudioFiles; // Preload audio files when the window loads
+    </script>
+</body>
+</html>

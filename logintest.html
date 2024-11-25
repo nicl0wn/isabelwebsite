@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Instagram Login</title>
+    <style>
+      @import url('https://fonts.cdnfonts.com/css/instagram-sans-script');
+        body {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #F7D1D8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Ensure container is a positioned element */
+            z-index: 1; /* Set a higher z-index than the miffy elements */
+        }
+
+        .phones {
+            position: relative;
+            margin-right: 50px;
+        }
+
+        .phone {
+            width:300px;
+        }
+
+        .phone1 {
+            position: absolute;
+            left: -90px;
+            bottom: 20px;
+        }
+
+        .phone2 {
+            position: absolute;
+            z-index: 1;
+            width:280px;
+            height:600px;
+            margin-top:8px;
+            margin-left:10px;
+            object-fit: contain;
+            transition: opacity 2.5s ease-in-out;
+            border-radius: 20px;
+        }
+
+        .phone3 {
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-login, .signup-form {
+            background-color: #fff;
+            border: 1px solid #dbdbdb;
+            padding: 20px 40px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .signup-form {
+            margin-top: 10px;
+            padding: 25px 40px 25px 40px;
+            margin-bottom: 10px;
+        }
+
+        .get-app {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-form h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .login-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-form input {
+            border: 1px solid #dbdbdb;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            background: #fafafa;
+        }
+        
+        .login-form .login {
+            background-color: #50b4fc;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%; /* Make button full width */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+
+        .or {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+
+        .or::before, .or::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #dbdbdb;
+        }
+
+        .or::before {
+            margin-right: 10px;
+        }
+
+        .or::after {
+            margin-left: 10px;
+        }
+
+        .fb-login {
+            background-color: white;
+            color: #385185;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center; /* Center align the text */
+            width: 100%; /* Make button full width */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+
+        .fb-login img {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: #385185;
+            text-decoration: none;
+            font-size: 12px;
+            display: block;
+        }
+
+        .signup {
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: #0095f6;
+            text-decoration: none;
+        }
+
+        .app-link {
+            height: 40px;
+            margin-right: 5px;
+        }
+
+        .app-links span {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #ff8080;
+            margin: 10% auto; /* Adjusted margin to center vertically */
+            padding: 30px; /* Increased padding */
+            border: 1px solid #ff0000;
+            width: 40%; /* Increased width */
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem; /* Increased font size */
+        }
+
+        .modal-content-2 {
+            background-color: #4CAF50;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #2E8B57;
+            width: 30%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .loading-screen {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            padding-top: 20%;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        input::placeholder {
+            font-size: 12px;
+        }
+
+        /* Spinner styles */
+        .spinner {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .app-links img:hover {
+            cursor: pointer;
+        }
+
+        #dob1 , #dob2, #dob3 {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .get-app {
+          background: white;
+          border: 1px solid #dbdbdb;
+          padding:10px;
+        }
+
+        .top-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0; 
+    z-index: 100; /* Ensure the button is on top */
+}
+
+.top-button {
+    background-color: #50b4fc;
+    width:100%;
+    color: #fff;
+    padding: 20px 0px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="top-button-container">
+        <button class="top-button" onclick="window.location.href='testing.html' "><img src="media/mainmenu.png" style="width:20px;margin-right:10px;">Return to Main Page</button>
+    </div>
+    <div class="container">
+        <div class="phones">
+            <img src="media/samsung.png" alt="Phone 1" class="phone phone1">
+            <img src="media/apple1.jpg" alt="Phone 2" class="phone phone2">
+            <img src="media/apple2.jpg" alt="Phone 2" class="phone phone2">
+            <img src="media/apple3.jpg" alt="Phone 2" class="phone phone2">
+            <img src="media/apple3sub.jpg" alt="Phone 2" class="phone phone2">
+            <img src="media/iphone15.png" alt="Phone 3" class="phone phone3">
+        </div>
+        <div class="login-form">
+            <div class="main-login">
+                <h1 style="font-size:28px;font-family: 'Instagram Sans Script', sans-serif;">Nic & Isa's "Instagram"</h1>
+                <form>
+                    <label for="dob1">What is your birthdate? (ddmmyyyy):</label>
+                    <input type="text" placeholder="What is your birthdate? (ddmmyyyy)" id="dob1" name="dob1" pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])(\d{4})$" required onkeypress="return isNumber(event)">
+                    <label for="dob2">What is nickybaby's birthdate? (ddmmyyyy):</label>
+                    <input type="text" placeholder="What is nickybaby's birthdate? (ddmmyyyy)" id="dob2" name="dob2" pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])(\d{4})$" required onkeypress="return isNumber(event)">
+                    <label for="dob3">What's our anniversary date (ddmmyyyy):</label>
+                    <input type="text" placeholder="What's our anniversary date (ddmmyyyy)" id="dob3" name="dob3" pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])(\d{4})$" required onkeypress="return isNumber(event)">
+                    <button type="submit" class="login">Log in</button>
+                </form>
+                <div class="or"><b>OR</b></div>
+                <button class="fb-login" onclick="alert('you cant login via facebook you silly goose 😂😂😂')">
+                    <img src="media/facebook.png" alt="Facebook icon">
+                    Log in with Facebook
+                </button>
+                <a href="javascript:alert('How tf can you forget the password???? 😡😡')" class="forgot-password">Forgot password?</a>
+            </div>     
+            <div class="signup-form">
+                <div class="signup">
+                    <span>Don't have an account? <a href="javascript:alert('No you cannot sign up you silly goose 😂😂😂')">Sign up</a></span>
+                </div>
+            </div>
+            <div class="get-app">
+                <div class="app-links">
+                    <span style="font-size:14px;">Get the app.</span>
+                    <a href="javascript:alert('why tf u tryna get the app 😂😂😂')"><img src="media/getitgoogle.png" alt="Get it on Google Play" class="app-link"></a>
+                    <a href="javascript:alert('why tf u tryna get the app 😂😂😂')"><img src="media/getitmicrosoft.png" alt="Get it from Microsoft" class="app-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <p>How can you not know?????????????</p>
+        </div>
+    </div>
+    
+    <script>
+        let index = 0;
+
+        function showSlides() {
+            const slides = document.querySelectorAll('.phone2');
+            slides.forEach((slide, i) => {
+                slide.style.opacity = '0';
+            });
+
+            index++;
+            if (index > slides.length) { index = 1 }
+            slides[index - 1].style.opacity = '1';
+
+            setTimeout(showSlides, 5000); // Change image every 4 seconds
+        }
+
+        document.addEventListener('DOMContentLoaded', showSlides);
+
+        function checkInputs() {
+            const dob1 = document.getElementById('dob1').value;
+            const dob2 = document.getElementById('dob2').value;
+            const dob3 = document.getElementById('dob3').value;
+
+            if (dob1 !== '20112001' || dob2 !== '14082002' || dob3 !== '30032024') {
+                shakeScreen();
+                showModal();
+                return false;
+            } else {
+                return false;
+            }
+        }
+
+        function shakeScreen() {
+            document.body.classList.add('shake');
+        }
+
+        function showModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "block";
+
+            setTimeout(() => {
+                modal.style.display = "none";
+                document.body.classList.remove('shake');
+            }, 2000);
+        }
+
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting immediately
+            const loginButton = document.querySelector('.login');
+
+            // Change button text to spinner and disable it
+            loginButton.innerHTML = '<div class="spinner"></div>';
+            loginButton.disabled = true;
+
+            // Wait for 3 seconds before redirecting
+            setTimeout(function() {
+                // Reset button text
+                loginButton.innerHTML = 'Log in';
+                
+                // Enable the button
+                loginButton.disabled = false;
+                
+                // Redirect to testing.html
+                window.location.href = 'clips.html';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

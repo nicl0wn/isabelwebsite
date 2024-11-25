@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/instagram-sans-script');
+        body {
+            background-color: white;
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar {
+            padding: 8px 12px 20px 12px;
+            border-right: 1px solid #ccc;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align items to the left */
+            font-size: 20px;
+            font-weight: 700;
+            width: 310px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar i {
+            margin-top: 10px;
+            font-size: 24px;
+        }
+
+        .sidebar button {
+            background-color: transparent;
+            border: none;
+            color: black;
+            padding: 12px;
+            margin: 4px 0 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: left; /* Align button text to the left */
+            transition: background-color 0.3s ease;
+            width: 100%;
+            border-radius: 8px;
+            display: flex; /* Add this line */
+            align-items: center; /* Add this line */
+        }
+
+        .sidebar button:hover {
+            background-color: #f2f2f2;
+        }
+
+        .sidebar button img {
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar button:hover img {
+            transform: scale(1.1);
+        }
+
+        .sidebar button .profile-pic1 {
+            transition: transform 0.1s ease;
+        }
+
+        .sidebar button:hover .profile-pic1 {
+            transform: scale(1.1);
+        }
+
+        .sidebar img {
+            height: 24px;
+            width: 24px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .post-container {
+            max-width: 468px;
+            width: 468px;
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .video-container {
+            position: relative;
+            height: 585px;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            object-fit: cover;
+        }
+
+        .video-container:hover {
+            cursor: pointer;
+        }
+
+        .post-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 15px;
+        }
+
+        .post-details .icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .post-details .icons img {
+            width: 25px;
+            height: 25px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .post-details .icons img:last-child {
+            margin-left: auto;
+        }
+
+        .post-details .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .post-details .user-info p {
+            margin: 0;
+        }
+
+        .user-info {
+            font-size: 14px;
+        }
+
+        .dot {
+            height: 4px;
+            width: 4px;
+            background-color: rgb(115, 115, 115);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .profile-pic {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 10px;
+        }
+
+        .profile-pic1 {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-image: url('media/profile pic.jpg');
+            background-size: cover;
+        }
+
+        .more-options {
+            margin-left: auto;
+            color: black;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .more-options:hover {
+            color: rgb(115, 115, 115);
+        }
+
+        .sidebarbtn {
+            padding-left: 16px;
+        }
+
+        .logo {
+            font-family: 'Instagram Sans Script', sans-serif;
+            width: 100%;
+            padding: 25px 12px 35px 12px;
+            font-size: 25px;
+        }
+
+        .logo a {
+            font-family: 'Instagram Sans Script', sans-serif;
+            width: 100%;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo a:hover {
+            color: rgb(115, 115, 115);
+        }
+
+        .user-profiles {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .user-profile .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .user-profile span {
+            font-size: 12px;
+            text-align: center;
+            color: rgb(115, 115, 115);
+        }
+
+        .duration-ago {
+            color: rgb(115, 115, 115);
+        }
+
+        .post-comments {
+            margin-top: 8px !important;
+            color: rgb(115, 115, 115);
+        }
+
+        .post-comments:hover {
+            cursor: pointer;
+        }
+
+        textarea {
+            background: rgba(0, 0, 0, 0);
+            border: none;
+            outline: 0;
+            cursor: text;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            resize: none;
+            overflow: auto;
+            padding: 0;
+            height: 1.2em; /* Adjust this value as needed */
+            line-height: 1.2; /* Match the line-height with the height */
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 8px;
+        }
+
+        .username {
+            font-weight: 600;
+        }
+
+        .likes {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .user-profile:hover,
+        .profile-pic-post:hover,
+        .likes:hover,
+        .profile-pic:hover,
+        .username:hover {
+            cursor: pointer;
+        }
+
+        .profile-pic-post {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-image: url('media/profile pic.jpg'); /* Replace with the actual path to your profile picture */
+            background-size: cover;
+            margin-right: 10px;
+        }
+
+        video::-webkit-media-controls-fullscreen-button {
+            display: none;
+        }
+
+        body.dark-mode {
+            background-color: black;
+            color: white;
+        }
+
+        .sidebar.dark-mode {
+            background-color: black;
+            border-right: 1px solid rgb(38, 38, 38);
+        }
+
+        .sidebar.dark-mode button {
+            color: white;
+        }
+
+        .sidebar.dark-mode button:hover {
+            background-color: #333;
+        }
+
+        .sidebar.dark-mode .logo a {
+            color: white;
+        }
+
+        .sidebar.dark-mode .logo a:hover {
+            color: #201c1c;
+        }
+
+
+        .content.dark-mode .post-details .user-info p,
+        .content.dark-mode textarea {
+            color: white;
+        }
+
+        .content.dark-mode .video-container .video{
+            border: 1px solid rgb(38, 38, 38);
+        }
+
+        .content.dark-mode .post-details .post-comments {
+            color: rgb(168, 168, 168) !important;
+        }
+
+        .content.dark-mode .post-details .post-comments:hover {
+            color: #aaa;
+        }
+
+        .content.dark-mode .post-container i {
+            color: white;
+        }
+
+        .content.dark-mode .post-container{
+            border-color: rgb(38, 38, 38);
+        }
+
+        .toggle-btn {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.toggle-text {
+    margin-right: 10px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-switch::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.dark-mode .toggle-switch {
+    background-color: #555;
+}
+
+.dark-mode .toggle-switch::before {
+    transform: translateX(20px);
+}
+
+#darkmodediv {
+    margin-top: auto;
+    margin-bottom:50px;
+    width:100%;
+}
+
+#dark-mode-toggle:hover{
+    cursor: pointer;
+}
+
+@media (max-width: 1440px) {
+            .sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                margin-left: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 300px; 
+            }
+        }
+
+        @media (max-width: 520px) {
+            .content {
+                margin-left: 200px;
+            }
+
+            .sidebar{
+                display:none;
+            }
+        }
+
+        @media (max-width: 1220px) {
+            .sidebar {
+                width: 80px;
+                align-items: center;
+                padding:0px;
+            }
+
+            .sidebar .logo a { 
+                display: none;
+            }
+
+            .sidebar button {  
+                display:block;
+                text-align: center;
+            }
+
+            .sidebar button img,
+            .sidebar i {
+                margin: 0;
+                padding:0;
+            }
+
+            .sidebar .sidebarbtn {
+                display: none;
+            }
+
+            .sidebar .profile-pic1{
+                display:inline-block;
+            }
+
+            .logo a {
+                display: none;
+                
+            }
+
+            .logo .instalogo {
+                display: inline-block !important;
+                font-size: 28px;
+                text-align: center;
+                align-items: center;
+            }
+
+        }
+
+        .caughtup{
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <a href="clips.html">"Instagram"</a>
+            <button style="display:none;" class="instalogo" onclick="window.location.href = 'clips.html'"><img src="media/instagram.png"></i></button>
+        </div>
+        <i class="fas fa-video-o"></i>
+        <button><img id="homeimg" src="media/home.png"><span class="sidebarbtn">Main Page</span></button>
+        <button><img id="clapperimg" src="media/clapper.png"><span class="sidebarbtn"><b>Videos</b></span></button>
+        <button onclick="window.location.href='timeline.html'"><img id="scheduleimg" src="media/schedule.png"><span class="sidebarbtn">Timeline</span></button>
+        <button><div class="profile-pic1"></div><span class="sidebarbtn">Profile</span></button>
+        <div id="darkmodediv"> 
+            <button onclick="window.location.href= 'logintest.html'">
+                <img id="logoutimg" src="media/logout.png">
+                <span class="sidebarbtn">Log Out</span>
+            </button>
+            <button id="dark-mode-toggle"><span class="sidebarbtn" style="width:220px;">Dark Mode</span><span class="toggle-switch"></span></button>
+        </div>
+
+    </div>
+    <div class="content">
+        <div class="user-stories">
+            <div class="user-profiles">
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username1</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username2</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username3</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username3</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username3</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username3</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username3</span>
+                </div>
+                <div class="user-profile">
+                    <div class="profile-pic"></div>
+                    <span>username3</span>
+                </div>
+                <!-- Add more user profiles as needed -->
+            </div>
+        </div>
+        <div class="post-container">
+            <div class="header">
+                <div class="profile-pic-post"></div>
+                <span class="username">nicl0wn</span>
+                <span class="dot"></span>
+                <span class="duration-ago">1d</span>
+                <i class="fa fa-ellipsis-h more-options"></i>
+            </div>
+            <div class="video-container">
+                <video src="media/video1.mp4" class="video" loop controls autoplay muted controlsList="noplaybackrate nopic" disablePictureInPicture></video>
+            </div>
+            <div class="post-details">
+                <div class="icons">
+                    <img class="heartimg" src="media/heart.png" alt="Heart">
+                    <img class="chatimg" src="media/chat.png" alt="Comment">
+                    <img class="sendimg" src="media/send.png" alt="Share">
+                    <img class="savedimg" src="media/saved.png" alt="Bookmark">
+                </div>
+                <div class="user-info">
+                    <div class="likesdiv">
+                        <p class="likes">6969 likes</p>
+                    </div>
+                    <div class="descriptiondiv">
+                        <p style="margin-top: 8px;"><span class="username">nicl0wn</span> this is our first clip together</p>
+                    </div>
+                    <div class="commentsdiv">
+                        <p class="post-comments">View all 69 comments</p>
+                    </div>
+                    <div class="addcomments">
+                        <textarea placeholder="Add a comment"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="post-container">
+            <div class="header">
+                <div class="profile-pic-post"></div>
+                <span class="username">nicl0wn</span>
+                <span class="dot"></span>
+                <span class="duration-ago">1d</span>
+                <i class="fa fa-ellipsis-h more-options"></i>
+            </div>
+            <div class="video-container">
+                <video src="media/video2.MOV" class="video" loop controls autoplay controlsList="noplaybackrate nopic" disablePictureInPicture></video>
+            </div>
+            <div class="post-details">
+                <div class="icons">
+                    <img class="heartimg" src="media/heart.png" alt="Heart">
+                    <img class="chatimg" src="media/chat.png" alt="Comment">
+                    <img class="sendimg" src="media/send.png" alt="Share">
+                    <img class="savedimg" src="media/saved.png" alt="Bookmark">
+                </div>
+                <div class="user-info">
+                    <p class="likes">6969 likes</p>
+                    <p style="margin-top: 8px;"><span class="username">nicl0wn</span> this is our first clip together</p>
+                    <p class="post-comments">View all 69 comments</p>
+                    <textarea placeholder="Add a comment" style="color:black !important;"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="caughtup" style="padding:32px 12px 150px 12px">
+            <div>
+                <img src="media/igtick.png" style="width:96px;height:96px;margin-bottom: 16px;">
+            </div>
+            <div style="font-size:20px;">
+                You're all caught up
+            </div>
+            <div style="color:rgb(115, 115, 115);font-size:14px;">
+                You've seen all posts
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const videos = document.querySelectorAll(".video");
+    
+    let currentPlayingVideo = null;
+    
+    const pauseAllVideosExcept = (video) => {
+        videos.forEach(v => {
+            if (v !== video) {
+                v.pause();
+            }
+        });
+    };
+
+    const handleIntersect = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (currentPlayingVideo && currentPlayingVideo !== entry.target) {
+                    currentPlayingVideo.pause();
+                }
+                entry.target.play();
+                currentPlayingVideo = entry.target;
+            } else {
+                entry.target.pause();
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, {
+        threshold: 0.5 // Adjust this value as needed
+    });
+
+    videos.forEach(video => {
+        observer.observe(video);
+        video.addEventListener('play', () => {
+            pauseAllVideosExcept(video);
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
+    const body = document.body;
+    const sidebar = document.querySelector(".sidebar");
+    const content = document.querySelector(".content");
+
+    darkModeToggle.addEventListener("click", function () {
+        // Delay adding the dark-mode class to allow the fade-in effect
+        setTimeout(() => {
+            body.classList.toggle("dark-mode");
+            sidebar.classList.toggle("dark-mode");
+            content.classList.toggle("dark-mode");
+
+            // Toggle icons for all post containers
+            const postContainers = document.querySelectorAll(".post-container");
+            postContainers.forEach(postContainer => {
+                toggleIcons(postContainer);
+            });
+
+            // Toggle icons using IDs
+            toggleDarkModeIcons();
+        }, 100); // Adjust delay as needed
+    });
+
+    function toggleIcons(postContainer) {
+        const heartdark = postContainer.querySelector(".heartimg");
+        const chatdark = postContainer.querySelector(".chatimg");
+        const senddark = postContainer.querySelector(".sendimg");
+        const saveddark = postContainer.querySelector(".savedimg");
+
+        if (body.classList.contains("dark-mode")) {
+            heartdark.src = "media/darkmodeheart.png"; // Path to the dark mode icon
+            chatdark.src = "media/chatdark.png";
+            senddark.src = "media/senddark.png";
+            saveddark.src = "media/saveddark.png";
+        } else {
+            heartdark.src = "media/heart.png"; // Path to the light mode icon
+            chatdark.src = "media/chat.png";
+            senddark.src = "media/send.png";
+            saveddark.src = "media/saved.png";
+        }
+    }
+
+        function toggleDarkModeIcons() {
+        const homeimg = document.getElementById("homeimg");
+        const clapperimg = document.getElementById("clapperimg");
+        const scheduleimg = document.getElementById("scheduleimg");
+        const logoutimg = document.getElementById("logoutimg");
+        const darkModeIcon = document.getElementById("dark-mode-icon");
+
+        if (body.classList.contains("dark-mode")) {
+            homeimg.src = "media/homedark.png"; 
+            clapperimg.src = "media/clapperdark.png"; 
+            scheduleimg.src = "media/scheduledark.png"; 
+            logoutimg.src = "media/logoutwhite.png"; 
+            darkModeIcon.src = "media/dark-mode-on.png"; 
+        } else {
+            homeimg.src = "media/home.png"; 
+            clapperimg.src = "media/clapper.png"; 
+            scheduleimg.src = "media/schedule.png"; 
+            logoutimg.src = "media/logout.png";
+            darkModeIcon.src = "media/dark-mode-off.png"; 
+        }
+    }
+});
+
+
+</script>
+</html>

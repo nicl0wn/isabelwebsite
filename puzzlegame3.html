@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Isabel Cringe Puzzle</title>
+        <script>
+            var rows = 5;
+            var columns = 5;
+
+            var currTile;
+            var otherTile;
+
+            window.onload = function() {
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < columns; c++) {
+                        //<img>
+                        let tile = document.createElement("img");
+                        tile.src = "media/blank.jpg";
+
+                        //DRAG FUNCTIONALITY
+                        tile.addEventListener("dragstart", dragStart); //click on image to drag
+                        tile.addEventListener("dragover", dragOver);   //drag an image
+                        tile.addEventListener("dragenter", dragEnter); //dragging an image into another one
+                        tile.addEventListener("dragleave", dragLeave); //dragging an image away from another one
+                        tile.addEventListener("drop", dragDrop);       //drop an image onto another one
+                        tile.addEventListener("dragend", dragEnd);      //after you completed dragDrop
+
+                        document.getElementById("board").append(tile);
+                    }
+                }
+
+                //pieces
+                let pieces = [];
+                for (let i = 1; i <= rows * columns; i++) {
+                    pieces.push(i.toString()); //put "1" to "9" into the array (puzzle images names)
+                }
+                pieces.reverse();
+                for (let i = 0; i < pieces.length; i++) {
+                    let j = Math.floor(Math.random() * pieces.length);
+
+                    //swap
+                    let tmp = pieces[i];
+                    pieces[i] = pieces[j];
+                    pieces[j] = tmp;
+                }
+
+                for (let i = 0; i < pieces.length; i++) {
+                    let tile = document.createElement("img");
+                    tile.src = "puzzle3/" + pieces[i] + ".jpg";
+
+                    //DRAG FUNCTIONALITY
+                    tile.addEventListener("dragstart", dragStart); //click on image to drag
+                    tile.addEventListener("dragover", dragOver);   //drag an image
+                    tile.addEventListener("dragenter", dragEnter); //dragging an image into another one
+                    tile.addEventListener("dragleave", dragLeave); //dragging an image away from another one
+                    tile.addEventListener("drop", dragDrop);       //drop an image onto another one
+                    tile.addEventListener("dragend", dragEnd);      //after you completed dragDrop
+
+                    document.getElementById("pieces").append(tile);
+                }
+
+                document.querySelector('button').addEventListener('click', checkAnswer);
+            }
+
+            //DRAG TILES
+            function dragStart() {
+                currTile = this; //this refers to image that was clicked on for dragging
+            }
+
+            function dragOver(e) {
+                e.preventDefault();
+            }
+
+            function dragEnter(e) {
+                e.preventDefault();
+            }
+
+            function dragLeave() {
+                
+            }
+
+            function dragDrop() {
+                otherTile = this; //this refers to image that is being dropped on
+            }
+
+            function dragEnd() {
+                if (currTile.src.includes("blank")) {
+                    return;
+                }
+                let currImg = currTile.src;
+                let otherImg = otherTile.src;
+                currTile.src = otherImg;
+                otherTile.src = currImg;
+            }
+
+            // Check if the puzzle is correctly solved
+            function checkAnswer() {
+                const boardImages = document.querySelectorAll('#board img');
+                let isCorrect = true;
+                
+                for (let i = 0, j=boardImages.length + 1; i < boardImages.length; i++, j--) {
+                    const imgSrc = boardImages[i].src;
+                    const fileName = imgSrc.split('/').pop(); // get the file name from the src
+                    const expectedFileName = (j - 1) + ".jpg"; // generate the expected file name
+
+                    console.log(`Checking tile ${i + 1}: found ${fileName}, expecting ${expectedFileName}`);
+
+                    if (fileName !== expectedFileName) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+
+                if (isCorrect) {
+                    alert("Congratulations! The puzzle is correctly solved.");
+                } else {
+                    alert("The puzzle is not correctly solved. Try again.");
+                }
+            }
+        </script>
+        <style>
+            body {
+                background-color: #F7D1D8;
+                font-family: Arial, Helvetica, sans-serif;
+                text-align: center;
+            }
+
+            #board {
+                width: 324px;
+                height: 324px;
+                border: 2px solid purple;
+
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            #board img {
+                width: 79px;
+                height: 79px;
+                border: 0.5px solid lightblue;
+            }
+
+
+            #pieces {
+                width: 486px;
+                height: 243px;
+                border: 2px solid purple;
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+                background-color:white;
+            }
+
+            #pieces img {
+                width: 79px;
+                height: 79px;
+                border: 0.5px solid lightblue;
+            }
+
+            img:hover{
+        cursor: pointer;
+    }
+        </style>
+    </head>
+
+    <body>
+        <div class="header">
+            <h1>
+                CRINGE GIRL ALERT!!!<br>Complete the puzzle to see how cringe this girl is<br>DIFFICULTY: HARD
+            </h1>
+        </div>
+        <div id="board"></div>
+        <div id="pieces"></div>
+        <button>Check answer</button>
+    </body>
+</html>

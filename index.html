@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: #F7D1D8;
+            font-family: courier;
+        }
+
+        .card {
+            width: calc(25% - 40px); /* Adjust width based on spacing */
+            height: 500px; /* Adjust height as needed */
+            margin: 50px 20px 20px 20px;
+            overflow: hidden;
+            transition: transform .2s;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Box shadow for the cards */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card:hover .overlay {
+            opacity: 1;
+        }
+
+        p {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .spacing {
+            margin: 15px 0;
+        }
+
+        .headerdiv {
+            background-color: pink;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Add some padding for better spacing */
+            box-sizing: border-box; /* Ensure padding is included in the height */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Add box shadow */
+        }
+
+        .headerdiv img {
+            width: 120px; /* Increase size */
+            height: 120px; /* Increase size */
+            margin: 0 70px; /* Increase space between GIF and text */
+        }
+
+        .headertext {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .smalltext {
+        font-size:20px;
+    }
+
+        @media screen and (max-width: 1440px) {
+        .headerdiv img {
+            max-width: 80px; /* Adjust image size for smaller screens */
+            max-height:80px;
+        }
+
+        .headertext {
+            font-size:1px !important;
+            text-align: center;
+        }
+
+        #greeting {
+            font-size:30px !important;
+        }
+
+        .spacing {
+            margin: 10px 0; /* Adjust spacing between elements */
+        }
+        .togethertext{
+            font-size:20px !important;
+        }
+        #timer{
+            font-size:25px !important;
+        }
+        .smalltext{
+            font-size:15px !important;
+        }
+    }
+
+    </style>
+</head>
+<body style="margin:0;padding:0;">
+<div>
+    <div class="headerdiv">
+        <img src="media/miffy1.gif" alt="Left GIF">
+        <img src="media/miffy4.gif" alt="Left GIF">
+        <div class="headertext">
+            <div class="spacing">
+                <span id="greeting" style="font-size: 45px; font-weight: bold;">Hi Isabel ლ(´ڡ`ლ)</span>
+            </div>
+            <div class="spacing">
+                <span class="togethertext" style="font-size: 30px; font-weight: bold;">We have been together for</span>
+            </div>
+            <div class="spacing" style="font-weight: bold;font-size: 40px;" id="timer">Loading...</div>
+        </div>
+        <img src="media/miffy3.gif" alt="Right GIF">
+        <img src="media/miffy2.gif" alt="Right GIF">
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+        <div class="card" style="background-image: url(media/1.jpeg);">
+            <a href="logintest.html">
+                <div class="overlay">
+                    <p>Our Own "Instagram"</p>
+                </div>
+            </a>
+        </div>
+        <div class="card" style="background-image: url(media/2.jpeg);">
+            <a href="timer.html">
+                <div class="overlay">
+                    <p>Our Audio Player</p>
+                </div>
+            </a>
+        </div>
+        <div class="card" style="background-image: url(media/3.jpeg);">
+            <a href="puzzlegame.html">
+                <div class="overlay">
+                    <p>Play Isabel Cringe Puzzle</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    function padWithZero(number) {
+        return number < 10 ? '0' + number : number;
+    }
+
+    function updateTime() {
+        const startDate = new Date('March 30, 2024 20:00:00');
+        const now = new Date();
+        const timeDiff = now - startDate;
+
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = padWithZero(Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+        const minutes = padWithZero(Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)));
+        const seconds = padWithZero(Math.floor((timeDiff % (1000 * 60)) / 1000));
+
+        document.getElementById('timer').innerHTML = `${days} <span class="smalltext">Days</span> <span class="timergap">${hours} <span class="smalltext">Hours</span></span> <span class="timergap">${minutes} <span class="smalltext">Minutes</span></span> <span class="timergap">${seconds} <span class="smalltext">Seconds</span></span>`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+</script>
+</body>
+</html>

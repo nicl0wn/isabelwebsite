@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="foodoption.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "qImZcSAc8okbVxK1e",
+            });
+        })();
+        
+    </script>
+    <style>
+        .fade-in {
+            opacity: 0;
+            animation: fade-in 0.5s ease-in-out forwards;
+        }
+
+        .fade-out {
+            opacity: 0 !important;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="greeting">
+        <h1>Hi Isabel</h1>
+        <p>What do you want to eat for breakfast?</p>
+    </div>
+    <div class="transition">
+        <p>I have picked out some options for you to choose</p>
+    </div>
+    <div class="container fade-in" style="display: none;">
+        <div class="food-options">
+            <div class="food-option">
+                <h2 id="food1-header" class="food-header"></h2>
+                <img id="food1" class="food-img" src="media/Roast & Coffee.jpg" alt="Food Option 1" onclick="chooseFood(1)">
+            </div>
+            <div class="food-option">
+                <h2 id="food2-header" class="food-header"></h2>
+                <img id="food2" class="food-img" src="media/Palates & Bagels.jpg" alt="Food Option 2" onclick="chooseFood(2)">
+            </div>
+        </div>
+    </div>
+    <div class="winner-container" style="display: none;">
+        <h2 class="winner-header"></h2>
+        <img id="winner-image" src="" alt="Winner">
+    </div>
+    <div class="map-container" style="display: none;">
+        <h2 class="map-header">Here's the location of your chosen restaurant:</h2>
+        <iframe class="map-iframe" id="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.528819145432!2d103.7592800836366!3d1.4567453574496736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da12e7da59882b%3A0x1b933f83cf1e5cbb!2sRoast%20%26%20Coffee%20-%20Retro%20Garden%201968&#39;s!5e0!3m2!1sen!2ssg!4v1732541639475!5m2!1sen!2ssg" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <script>
+        let foodOptions = ["media/Roast & Coffee.jpg", "media/Palates & Bagels.jpg", "media/D cafe.jpg", "media/Sushi House.jpeg", "media/Keijometo.jpg"];
+        let firstOption = 0;
+        let secondOption = 1;
+        let currentOptions = [firstOption, secondOption];
+        let winner = "";
+
+        function sendMail(){
+            var params = {
+                name: "nicholas",
+                email: "deadlymouse15@gmail.com",
+                message: "Food chosen is: " + winner
+            };
+            const serviceID = "service_slbsusa"
+            const templateID = "template_un5v89c"
+
+            emailjs.send(serviceID,templateID,params)
+        }       
+
+        function chooseFood(option) {
+            if (firstOption === foodOptions.length - 1 || secondOption === foodOptions.length - 1) {
+                if (option === 1) {
+                    winner = foodOptions[firstOption];
+                } else if (option === 2) {
+                    winner = foodOptions[secondOption];
+                }
+
+                const winnerImage = document.getElementById('winner-image');
+                winnerImage.src = winner;
+                const winnerContainer = document.querySelector('.winner-container');
+                document.querySelector('.container').style.display = 'none';
+                winnerContainer.style.display = 'block';
+                winnerContainer.classList.add('fade-in');
+
+
+                const winnerHeader = document.querySelector('.winner-header');
+                const fileName = winner.split('/').pop().split('.')[0];
+                winnerHeader.textContent = `YIPEE let's have ${fileName.toUpperCase()}\nYour choice will be sent to me hehe`;
+                const mapIframe = document.getElementById('map-iframe');
+                mapIframe.src = `https://www.google.com/maps/embed?pb=${getMapLocation(fileName)}`;
+
+                sendMail()
+                setTimeout(() => {
+                    winnerContainer.classList.remove('fade-in');
+                    winnerContainer.classList.add('fade-out');
+                    setTimeout(() => {
+                        winnerContainer.style.display = 'none'; // Hide the winner container after fade-out animation
+                    }, 2000); // Adjust timing if needed
+                }, 5000);
+
+                setTimeout(() => {
+                    const mapContainer = document.querySelector('.map-container');
+                    mapContainer.style.display = 'flex';
+                    // No fade-in class needed for immediate display
+                    mapContainer.classList.add('fade-in')
+                }, 5200);
+            } else if (option === 2) {
+                const foodImg1 = document.getElementById('food1');
+                const foodHeader1 = document.getElementById('food1-header');
+                const cross = document.createElement('div');
+                cross.classList.add('cross');
+                cross.textContent = '✖';
+                foodImg1.parentNode.appendChild(cross);
+                cross.style.opacity = 1;
+
+                foodImg1.classList.add('fade-out');
+                foodHeader1.classList.add('fade-out');
+                setTimeout(function() {
+                    cross.style.opacity = 0;
+                    cross.remove();
+                    firstOption = (currentOptions[0] + 1);
+                    if (firstOption === currentOptions[1]) {
+                        firstOption = (firstOption + 1);
+                    }
+                    if (firstOption < currentOptions[1]) {
+                        firstOption = (secondOption + 1);
+                    }
+                    currentOptions[0] = firstOption;
+                    document.getElementById('food1').src = foodOptions[firstOption];
+                    const newFileName = foodOptions[firstOption].split('/').pop().split('.')[0];
+                    foodHeader1.textContent = newFileName.toUpperCase();
+                    document.getElementById('food1').classList.remove('fade-out');
+                    foodHeader1.classList.remove('fade-out');
+                }, 500);
+            } else if (option === 1) {
+                const foodImg2 = document.getElementById('food2');
+                const foodHeader2 = document.getElementById('food2-header');
+                const cross = document.createElement('div');
+                cross.classList.add('cross');
+                cross.textContent = '✖';
+                foodImg2.parentNode.appendChild(cross);
+                cross.style.opacity = 1;
+
+                foodImg2.classList.add('fade-out');
+                foodHeader2.classList.add('fade-out');
+                setTimeout(function() {
+                    cross.style.opacity = 0;
+                    cross.remove();
+                    secondOption = (currentOptions[1] + 1);
+                    if (secondOption === currentOptions[0]) {
+                        secondOption = (secondOption + 1);
+                    }
+                    if (secondOption < currentOptions[0]) {
+                        secondOption = (firstOption + 1);
+                    }
+                    currentOptions[1] = secondOption;
+                    document.getElementById('food2').src = foodOptions[secondOption];
+                    const newFileName = foodOptions[secondOption].split('/').pop().split('.')[0];
+                    foodHeader2.textContent = newFileName.toUpperCase();
+                    document.getElementById('food2').classList.remove('fade-out');
+                    foodHeader2.classList.remove('fade-out');
+                }, 500);
+            }
+            console.log(currentOptions);
+            console.log(foodOptions.length);
+        }
+
+        // Show the greeting initially
+        const greeting = document.querySelector('.greeting');
+        const transition = document.querySelector('.transition');
+        const container = document.querySelector('.container');
+
+        // Set initial headers
+        const foodHeader1 = document.getElementById('food1-header');
+        const foodHeader2 = document.getElementById('food2-header');
+        const initialFileName1 = foodOptions[firstOption].split('/').pop().split('.')[0];
+        const initialFileName2 = foodOptions[secondOption].split('/').pop().split('.')[0];
+        foodHeader1.textContent = initialFileName1.toUpperCase();
+        foodHeader2.textContent = initialFileName2.toUpperCase();
+
+        // Hide the greeting and show the transition after 7.5 seconds
+        setTimeout(() => {
+            greeting.style.display = 'none';
+            transition.style.display = 'flex';
+        }, 7500);
+
+        // Hide the transition and show the container after 11.5 seconds
+        setTimeout(() => {
+            transition.style.display = 'none';
+            container.style.display = 'block';
+            // Remove the fade-in class after the animation is complete
+            setTimeout(() => {
+                container.classList.remove('fade-in');
+            }, 2000); // 2000ms = 2s (the duration of the fade-in animation)
+        }, 10500);
+        function getMapLocation(filename) {
+    switch (filename) {
+        case 'Roast & Coffee': // Roast & Coffee - Retro Garden 1968's
+            return '!1m18!1m12!1m3!1d3988.5288286322634!2d103.7615760749659!3d1.4567399985295602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da12e7da59882b%3A0x1b933f83cf1e5cbb!2sRoast%20%26%20Coffee%20-%20Retro%20Garden%201968%27s!5e0!3m2!1sen!2ssg!4v1732540826429!5m2!1sen!2ssg';
+        case 'Palates & Bagels': // Palates & Bagels by T.A.M Jalan Dhoby
+            return '!1m18!1m12!1m3!1d31907.99275854751!2d103.74299170407018!3d1.473440354811316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1328d82d49b1%3A0xb958e180e1bbe6e9!2sPalates%20%26%20Bagels%20by%20T.A.M%20Jalan%20Dhoby!5e0!3m2!1sen!2ssg!4v1732540857323!5m2!1sen!2ssg';
+        case 'D cafe': // Cafe
+            return '!1m18!1m12!1m3!1d3988.478478004788!2d103.76725857496591!3d1.4849097985011426!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da6d6b4b225f45%3A0xedf1435fd0360c34!2zROKAmSBDYWZl!5e0!3m2!1sen!2ssg!4v1732540881319!5m2!1sen!2ssg';
+        case 'Sushi House': // Sushi House
+            return '!1m18!1m12!1m3!1d63816.213213281015!2d103.6659503274211!3d1.4654710758874905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1331822abb9f%3A0x96f4a38c13894699!2sSushi%20House%20City%20Square!5e0!3m2!1sen!2ssg!4v1732540925344!5m2!1sen!2ssg';
+        case 'Keijometo': // Keijometo
+            return '!1m18!1m12!1m3!1d3988.4645204144645!2d103.75742587496597!3d1.4926245984933626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da6da1d1a23c95%3A0x4764a6809c395162!2sKeijometo!5e0!3m2!1sen!2ssg!4v1732540946211!5m2!1sen!2ssg';
+        default:
+            return ''; // Default case if no match
+    }
+}
+
+    </script>
+</body>
+</html>
